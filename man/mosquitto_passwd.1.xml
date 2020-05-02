@@ -42,8 +42,7 @@
 		<title>Description</title>
 		<para><command>mosquitto_passwd</command> is a tool for managing
 			password files for the mosquitto MQTT broker.</para>
-		<para>Usernames must not contain ":". Passwords are stored in a similar
-			format to
+		<para>Passwords are stored in a similar format to
 			<citerefentry><refentrytitle>crypt</refentrytitle><manvolnum>3</manvolnum></citerefentry>.</para>
 	</refsect1>
 

@@ -41,6 +41,7 @@ test : test-compile 01 02 03 04 05 06 07 08 09 10 11 12
 	./01-connect-uname-pwd-no-flag.py
 ifeq ($(WITH_TLS),yes)
 	./01-connect-uname-password-success.py
+	./01-connect-uname-with-colon-password-success.py
 else
 	./01-connect-uname-password-success-no-tls.py
 endif

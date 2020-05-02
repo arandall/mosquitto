@@ -247,8 +247,16 @@ static int pwfile_iterate(FILE *fptr, FILE *ftmp,
 		}
 		memcpy(lbuf, buf, buflen);
 		line++;
-		username = strtok(buf, ":");
-		password = strtok(NULL, ":");
+
+		username = buf;
+		/* Find last ':' the end of the username. */
+		password = strrchr(buf, ':');
+		if (password){
+			/* Terminate username and make password point past it. */
+			*password = '\0';
+			password = password + 1;
+		}
+
 		if(username == NULL || password == NULL){
 			fprintf(stderr, "Error: Corrupt password file at line %d.\n", line);
 			free(lbuf);

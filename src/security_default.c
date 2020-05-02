@@ -673,7 +673,6 @@ static int pwfile__parse(const char *file, struct mosquitto__unpwd **root)
 	FILE *pwfile;
 	struct mosquitto__unpwd *unpwd;
 	char *username, *password;
-	char *saveptr = NULL;
 	char *buf;
 	int buflen = 256;
 
@@ -693,9 +692,16 @@ static int pwfile__parse(const char *file, struct mosquitto__unpwd **root)
 	while(!feof(pwfile)){
 		if(fgets_extending(&buf, &buflen, pwfile)){
 			if(buf[0] == '#') continue;
-			if(!strchr(buf, ':')) continue;
 
-			username = strtok_r(buf, ":", &saveptr);
+			username = buf;
+			/* Find last ':' the end of the username. */
+			password = strrchr(buf, ':');
+			if (password){
+				/* Terminate username and make password point past it. */
+				*password = '\0';
+				password = password + 1;
+			}
+
 			if(username){
 				unpwd = mosquitto__calloc(1, sizeof(struct mosquitto__unpwd));
 				if(!unpwd){
@@ -717,7 +723,6 @@ static int pwfile__parse(const char *file, struct mosquitto__unpwd **root)
 					fclose(pwfile);
 					return MOSQ_ERR_NOMEM;
 				}
-				password = strtok_r(NULL, ":", &saveptr);
 				if(password){
 					password = misc__trimblanks(password);
 
